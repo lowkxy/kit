@@ -124,7 +124,7 @@ class Bot {
             } else if (windowTitle?.includes('DONATOR')) {
                 let kit = window.containerItems().find((f) => {
                     if (this.onceKit && this.hasCollected) {
-                        return f.customName && f.customName.replace(clrRegex, '').toUpperCase().includes(`${this.rank?.toUpperCase()}ONCE`)
+                        return f.customName && f.customName.replace(clrRegex, '').toUpperCase().includes(`ONCE${this.rank?.toUpperCase()}`)
                     } else {
                         return f.customName && f.customName.replace(clrRegex, '').toUpperCase().includes(this.rank?.toUpperCase())
                     }
