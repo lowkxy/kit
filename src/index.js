@@ -1,3 +1,4 @@
+// @ts-check
 const { configCheck, firstRun, usernamesCheck, rankChecker } = require('./exports');
 
 let userArr = [];
@@ -10,6 +11,7 @@ let kitInterval = null;
     await rankChecker(userArr) // Comment this line out after first run if you don't have more accounts to add/update.
 
     const { Bot } = require('./bot')
+    // @ts-ignore
     const config = require('../config.json')
 
     kitInterval = setInterval(() => {

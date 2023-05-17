@@ -6,6 +6,7 @@ const { randomInt, printMsg, fetchRank, logEvent } = require('./exports')
 const hostArray = ['top.pika.host', 'proxy001.pikasys.net', 'proxy002.pikasys.net'] // Add more if needed, since pika has "already connected to proxy" issues.
 const version = config.MC_INFO.version
 const clrRegex = /\u00A7[0-9A-FK-OR]/ig
+const opfRankArr = ['Pro', 'Hero', 'Lord', 'Legend', 'God', 'Immortal', 'Eternal']
 
 global.bot_amount = 0
 
@@ -21,6 +22,7 @@ class Bot {
         this.version = version
         this.spawnCount = 0
         this.onceKit = config.VARIABLES.once
+        this.isOPF = config.VARIABLES.server.toLowerCase().includes('opfactions') ? true : false
         this.hasCollected = false
         this.rank = null
 
@@ -124,7 +126,8 @@ class Bot {
             } else if (windowTitle?.includes('DONATOR')) {
                 let kit = window.containerItems().find((f) => {
                     if (this.onceKit && this.hasCollected) {
-                        return f.customName && f.customName.replace(clrRegex, '').toUpperCase().includes(`ONCE${this.rank?.toUpperCase()}`)
+                        // Could be made simpler and readable with regex, will do later.
+                        return f.customName && (f.customName.replace(clrRegex, '').toUpperCase().includes(`ONCE${this.rank?.toUpperCase()}`) || f.customName.replace(clrRegex, '').toUpperCase().includes(`${this.rank?.toUpperCase()}ONCE`))
                     } else {
                         return f.customName && f.customName.replace(clrRegex, '').toUpperCase().includes(this.rank?.toUpperCase())
                     }
@@ -168,6 +171,10 @@ class Bot {
             const windowTitle = window.title?.toUpperCase()
             if ((windowTitle?.includes(this.rank?.toUpperCase()) || windowTitle?.includes('DONATOR'))) {
                 if (this.onceKit && !this.hasCollected) {
+                    this.bot.chat('/kit')
+                } else if (this.isOPF && !this.rank.toUpperCase().includes('PRO')) {
+                    let rankIndex = opfRankArr.findIndex((o) => o.toUpperCase().includes(this.rank?.toUpperCase()))
+                    this.rank = opfRankArr[rankIndex - 1]
                     this.bot.chat('/kit')
                 } else {
                     this.bot.chat(`/gift ${config.VARIABLES.main_acc}`)
