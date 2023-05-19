@@ -29,6 +29,5 @@ let kitInterval = null;
     
         new Bot(user, default_pw)
         global.bot_amount++
-        console.log(global.bot_amount)
     }, config.VARIABLES.delay * 1000)
 })();

@@ -123,7 +123,7 @@ async function rankChecker(usernameArray) {
     db.exec(`CREATE TABLE IF NOT EXISTS users (username TEXT PRIMARY KEY, opsb_rank TEXT NULL, opf_rank TEXT NULL, opp_rank TEXT NULL)`)
     const insertUser = db.prepare('INSERT OR REPLACE INTO users (username, opsb_rank, opf_rank, opp_rank) VALUES (?, ?, ?, ?)')
 
-    // If ratelimits are introduced to the API add a timeout.
+    // Since there's a ratelimit to the api I haven't multithreaded it.
     for (let i = 0; i < usernameArray.length; i++) {
         let temp_user = usernameArray[i]
         temp_user.includes(':') ? temp_user = temp_user.split(/:/)[0] : null
